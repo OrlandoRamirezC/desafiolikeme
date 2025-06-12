@@ -7,28 +7,30 @@ const urlBaseServer = "http://localhost:5000";  //Esta ruta se conecta con el ba
 
 function App() {
   const [titulo, setTitulo] = useState("");
-  const [imgSrc, setImgSRC] = useState("");
+  const [url, setImgSRC] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [posts, setPosts] = useState([]);
 
-  const getPosts = async () => {
+/*   const getPosts = async () => {
     const { data: posts } = await axios.get(urlBaseServer + "/posts");
     setPosts([...posts]);
+  }; */
+    const getPosts = async () => {
+    const { data } = await axios.get(urlBaseServer + "/posts");
+    setPosts(data.posts);
   };
 
   const agregarPost = async () => {
-    const post = { titulo, url: imgSrc, descripcion };
+    const post = { titulo, img: url, descripcion };
     await axios.post(urlBaseServer + "/posts", post);
     getPosts();
   };
 
-  // este método se utilizará en el siguiente desafío
-  const like = async (id) => {
-    await axios.put(urlBaseServer + `/posts/like/${id}`);
+  const like = async (id, likesact) => {
+    await axios.put(urlBaseServer + `/posts/like/${id}`, {like: likesact +1});
     getPosts();
   };
 
-  // este método se utilizará en el siguiente desafío
   const eliminarPost = async (id) => {
     await axios.delete(urlBaseServer + `/posts/${id}`);
     getPosts();
